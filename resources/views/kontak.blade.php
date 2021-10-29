@@ -1,0 +1,56 @@
+@extends('layouts.layout')
+
+@section('kontak')
+    <div class="kontak">
+        <div class="all-title-box">
+            <div class="container text-center">
+                <h1>Kontak<span class="m_1">Hubungi Kami </span></h1>
+            </div>
+        </div>
+        
+        <div id="contact" class="section wb">
+            <div class="container">
+                <div class="section-title text-center">
+                    <h3>Butuh Bantuan? Tentu kami selalu Online!</h3>
+                    <p class="lead">Biarkan kami memberi Anda lebih banyak detail tentang situs web penawaran khusus yang Anda inginkan dari kami. Silakan isi formulir di bawah ini. <br>Kami memiliki jutaan pemilik situs web yang senang bekerja sama dengan kami!</p>
+                </div><!-- end title -->
+    
+                <div class="row">
+                    <div class="col-xl-6 col-md-12 col-sm-12">
+                        <div class="contact_form">
+                            <div id="message"></div>
+                            <form id="contactform" class="" action="contact.php" name="contactform" method="post">
+                                <div class="row row-fluid">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="text" name="first_name" id="first_name" class="form-control" placeholder="Nama Awal">
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Nama Akhir">
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="email" name="email" id="email" class="form-control" placeholder="Email mu">
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="text" name="phone" id="phone" class="form-control" placeholder="No. Hp">
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <textarea class="form-control" name="comments" id="comments" rows="6" placeholder="Detail"></textarea>
+                                    </div>
+                                    <div class="text-center pd">
+                                        <button type="submit" value="SEND" id="submit" class="btn btn-light btn-radius btn-brd grd1 btn-block">Kirim</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div><!-- end col -->
+                    {{-- <div class="col-xl-6 col-md-12 col-sm-12">
+                        <div class="map-box">
+                            <div id="custom-places" class="small-map"></div>
+                        </div>
+                    </div> --}}
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </div><!-- end section -->
+       
+    </div>
+@endsection
