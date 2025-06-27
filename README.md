@@ -3,7 +3,7 @@
 <p align="center">
   <i>Aplikasi web untuk manajemen perpustakaan berbasis Laravel dapat digunakan untuk online dan offline</i><br><br>
   <img src="https://img.shields.io/badge/Status-Development-yellow" />
-  <img src="https://img.shields.io/badge/Laravel-10.x-red" />
+  <img src="https://img.shields.io/badge/Laravel-7.x-red" />
   <img src="https://img.shields.io/badge/Made%20with-Love-ff69b4" />
 </p>
 
