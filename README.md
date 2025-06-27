@@ -15,7 +15,7 @@
 ✅ Manajemen data buku (tambah, edit, hapus)  
 ✅ Pencarian buku  
 ✅ Peminjaman dan pengembalian buku  
-✅ Non login user dapat membaca flipbook
+✅ Non login user dapat membaca flipbook  
 ✅ Dashboard statistik peminjaman dan pengunjung
 
 ---
