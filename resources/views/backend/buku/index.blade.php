@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @extends('backend.layout')
  
 @section('content')
@@ -11,8 +15,11 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-                    <div class="card-header border-0">
+                    <div class="card-header border-0 d-flex justify-content-between align-items-center">
                         <h3 class="mb-0">Tabel Buku</h3>
+                        <form method="GET" action="{{ route('buku.index') }}" class="search-form-admin">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul atau kode buku..." class="form-control search-input-admin">
+                        </form>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -28,7 +35,7 @@
                                     <th scope="col" class="text-center" data-sort="completion">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="buku-list">
                                     @foreach ($buku as $book)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
@@ -44,11 +51,11 @@
                                         <td>{{ $book->Penulis }}</td>
                                         <td class="text-center">{{ $book->Stok }}</td>
                                         <td class="text-center">
-                                            <form action="{{ route('buku.destroy',$book->id) }}" method="POST">
+                                            <form action="{{ route('buku.destroy', Crypt::encryptString($book->id)) }}" method="POST">
                             
-                                                <a class="btn btn-info" href="{{ route('buku.show',$book->id) }}">Tampil</a>
+                                                <a class="btn btn-info" href="{{ route('buku.show', Crypt::encryptString($book->id)) }}">Tampil</a>
                                 
-                                                <a class="btn btn-primary" href="{{ route('buku.edit',$book->id) }}">Edit</a>
+                                                <a class="btn btn-primary" href="{{ route('buku.edit', Crypt::encryptString($book->id)) }}">Edit</a>
                                     
                                                 @csrf
                                                 @method('DELETE')

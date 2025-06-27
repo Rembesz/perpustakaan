@@ -1,7 +1,257 @@
 .tittle-ai {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    margin:center;
+    margin: center;
     font-weight: bold;
     color: #5664b6;
     text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+
+/* Timeline dengan gambar */
+
+.timeline__content img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.timeline__content img:hover {
+    transform: scale(1.05);
+}
+
+.timeline__content {
+    background-color: #fff;
+    border: 2px solid #eea412;
+    border-radius: 30px;
+    color: #333;
+    display: block;
+    padding: 1.25rem;
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 300px;
+}
+
+.timeline__content:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.timeline__content h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 .625rem;
+    color: #333;
+    text-align: center;
+}
+
+.timeline__content p {
+    font-size: .9375rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+}
+
+
+/* Responsive untuk timeline */
+
+@media (max-width: 768px) {
+    .timeline__content {
+        min-height: 250px;
+        padding: 1rem;
+    }
+    .timeline__content img {
+        height: 120px;
+    }
+    .timeline__content h2 {
+        font-size: 1.1rem;
+    }
+    .timeline__content p {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .carousel-control-next,
+    .carousel-control-prev {
+        display: none !important;
+    }
+}
+
+
+/* Modern Dark Contact Form ala Colorlib v13 */
+
+.modern-contact-card {
+    background: #181818;
+    border-radius: 18px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+    padding: 2.5rem 2rem 2rem 2rem;
+    margin-bottom: 2rem;
+    transition: box-shadow 0.3s;
+    color: #fff;
+}
+
+.modern-contact-card:hover {
+    box-shadow: 0 16px 60px rgba(0, 0, 0, 0.45);
+}
+
+.form-floating-group {
+    position: relative;
+    margin-bottom: 1.7rem;
+}
+
+.form-floating-group label {
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    color: #bbb;
+    font-size: 1rem;
+    pointer-events: none;
+    background: transparent;
+    transition: 0.2s;
+    padding: 0 4px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+.modern-input:focus+label,
+.modern-input:not(:placeholder-shown)+label,
+.modern-input:valid+label {
+    top: -13px;
+    left: 14px;
+    font-size: 0.85rem;
+    color: #ffb300;
+    background: #181818;
+    padding: 0 8px;
+}
+
+.modern-input {
+    border-radius: 10px;
+    border: 1.5px solid #333;
+    padding: 18px 20px 18px 20px;
+    font-size: 1rem;
+    background: #232323;
+    color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: none;
+}
+
+.modern-input:focus {
+    border-color: #ffb300;
+    background: #232323;
+    outline: none;
+    box-shadow: 0 2px 12px rgba(255, 179, 0, 0.08);
+    color: #fff;
+}
+
+.modern-input::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+.btn-modern {
+    background: linear-gradient(90deg, #ffb300 0%, #eea412 100%);
+    color: #181818;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 12px rgba(255, 179, 0, 0.10);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    letter-spacing: 0.03em;
+}
+
+.btn-modern:hover,
+.btn-modern:focus {
+    background: linear-gradient(90deg, #eea412 0%, #ffb300 100%);
+    color: #181818;
+    box-shadow: 0 4px 24px rgba(255, 179, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+    .modern-contact-card {
+        padding: 1.5rem 0.7rem 1.5rem 0.7rem;
+    }
+    .form-floating-group label {
+        left: 12px;
+        font-size: 0.95rem;
+    }
+    .modern-input {
+        font-size: 0.95rem;
+        padding: 14px 12px 14px 12px;
+    }
+}
+
+.gradient-border-img {
+    display: inline-block;
+    border-radius: 18px;
+    padding: 4px;
+    background: linear-gradient(120deg, #ffb300, #eea412, #5664b6, #ffb300 90%);
+    background-size: 200% 200%;
+    background-position: 0 0;
+    transition: background-position 0.5s;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
+}
+
+.gradient-border-img:hover {
+    background-position: 100% 100%;
+}
+
+.gradient-border-img img {
+    display: block;
+    border-radius: 14px;
+    width: 100%;
+    height: auto;
+    background: #181818;
+}
+
+.tentang-img {
+    --g: 4px;
+    /* the gap */
+    --b: 12px;
+    /* border thickness*/
+    --c: #ffb300;
+    /* the color */
+    padding: calc(var(--g) + var(--b));
+    --_c: #0000 0 25%, var(--c) 0 50%;
+    --_g1: repeating-linear-gradient(90deg, var(--_c)) repeat-x;
+    --_g2: repeating-linear-gradient(180deg, var(--_c)) repeat-y;
+    background: var(--_g1) var(--_p, 25%) 0, var(--_g2) 0 var(--_p, 125%), var(--_g1) var(--_p, 125%) 100%, var(--_g2) 100% var(--_p, 25%);
+    background-size: 200% var(--b), var(--b) 200%;
+    cursor: pointer;
+    filter: grayscale(50%);
+    transition: .3s;
+}
+
+.tentang-img:hover {
+    --_p: 75%;
+    filter: grayscale(0%);
+}
+
+.search-form-admin {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    margin-left: auto;
+}
+
+.search-input-admin {
+    min-width: 220px;
+    border-radius: 20px;
+    border: 1px solid #bfc9d4;
+    padding: 6px 18px;
+    font-size: 1rem;
+    box-shadow: 0 1px 4px rgba(50, 50, 93, .07);
+    transition: border-color 0.2s;
+}
+
+.search-input-admin:focus {
+    border-color: #5e72e4;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(94, 114, 228, .15);
 }

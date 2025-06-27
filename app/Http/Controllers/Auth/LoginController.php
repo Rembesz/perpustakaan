@@ -33,6 +33,11 @@ class LoginController extends Controller
      *
      * @return void
      */
+    public function showLoginForm()
+    {
+        return view('auth.auth');
+    }
+
     public function __construct()
     {
         $this->redirectTo = route('admin');

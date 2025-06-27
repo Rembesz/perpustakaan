@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="Creative Tim">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Admin</title>
   <!-- Favicon -->
   <link rel="icon" href="{{ asset('library-temp') }}/images/favicon.ico" type="image/png">
@@ -31,10 +32,15 @@
   <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <div class="scrollbar-inner">
       <!-- Brand -->
-      <div class="sidenav-header  align-items-center">
+      <div class="sidenav-header  align-items-center" style="position: relative;">
         <a class="navbar-brand" href="javascript:void(0)">
-          <img src="{{ asset('dashboard') }}/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+          <h2 class="text-primary"class="text-primary">Admin Panel</h2>
+          {{-- <img src="{{ asset('dashboard') }}/assets/img/brand/blue.png" class="navbar-brand-img" alt="..."> --}}
         </a>
+        <!-- Mobile X Button -->
+        <button class="mobile-x-btn d-xl-none" data-action="sidenav-unpin" data-target="#sidenav-main" style="position: absolute; top: 10px; right: 10px; background: none; color: #333; border: none; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 1000; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">
+          ×
+        </button>
       </div>
       <div class="navbar-inner">
         <!-- Collapse -->
@@ -97,7 +103,8 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fas fa-search"></i></span>
                 </div>
-                <input class="form-control" placeholder="Search" type="text">
+                <input type="text" id="search" class="form-control" placeholder="Search...">
+                <div id="result"></div>
               </div>
             </div>
             <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
@@ -230,6 +237,9 @@
   <script src="{{ asset('dashboard') }}/assets/vendor/chart.js/dist/Chart.extension.js"></script>
   <!-- Argon JS -->
   <script src="{{ asset('dashboard') }}/assets/js/argon.js?v=1.2.0"></script>
+  
+  @stack('scripts')
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>

@@ -1,8 +1,8 @@
-<div id="testimonials" class="parallax section db parallax-off" style="background-image:url('{{ asset('library-temp') }}/images/parallax_04.jpg');">
+<div id="testimonials" class="parallax section db parallax-off" style="background-image:url('{{ asset('library-temp') }}/images/testi.jpeg');">
     <div class="container">
         <div class="section-title text-center">
-            <h3>Testimonials</h3>
-            <p>Lorem ipsum dolor sit aet, consectetur adipisicing lit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+            <h3>Ulasan</h3>
+            <p>Inilah apa yang mereka rasakan dan katakan setelah berkunjung dan menggunakan layanan AyoMaca kami.</p>
         </div><!-- end title -->
 
         <div class="row">
@@ -14,8 +14,8 @@
                             <h4>Logan </h4>
                         </div>
                         <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Wonderful Support!</h3>
-                            <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
+                            <h3><i class="fa fa-quote-left"></i> Apa kata mereka mengenai kami? </h3>
+                            <p class="lead">"AyoMaca merupakan perpustakaan yang ramah, nyaman, dan terus berkembang."</p>
                         </div>
                         <!-- end testi-meta -->
                     </div>
@@ -27,8 +27,8 @@
                             <h4>Login </h4>
                         </div>
                         <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Awesome Services!</h3>
-                            <p class="lead">Explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you completed.</p>
+                            <h3><i class="fa fa-quote-left"></i>  Apa kata mereka mengenai kami? </h3>
+                            <p class="lead">"Sebuah tempat belajar yang menyenangkan dan mudah diakses."</p>
                         </div>
                         <!-- end testi-meta -->
                     </div>
@@ -40,49 +40,12 @@
                             <h4>Venanda Mercy </h4>
                         </div>
                         <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Great & Talented Team!</h3>
-                            <p class="lead">The master-builder of human happines no one rejects, dislikes avoids pleasure itself, because it is very pursue pleasure. </p>
+                            <h3><i class="fa fa-quote-left"></i> Apa kata mereka mengenai kami?</h3>
+                            <p class="lead">"Pelayanan baik, koleksi lengkap, dan sekarang tersedia juga secara online."</p>
                         </div>
                         <!-- end testi-meta -->
                     </div>
                     <!-- end testimonial -->
-                    <div class="testimonial clearfix">
-                        <div class="testi-meta">
-                            <img src="{{ asset('library-temp') }}/images/testi_01.png" alt="" class="img-fluid">
-                            <h4>James Fernando </h4>
-                        </div>
-                        <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Wonderful Support!</h3>
-                            <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
-                        </div>
-                        <!-- end testi-meta -->
-                    </div>
-                    <!-- end testimonial -->
-
-                    <div class="testimonial clearfix">
-                        <div class="testi-meta">
-                            <img src="{{ asset('library-temp') }}/images/testi_02.png" alt="" class="img-fluid">
-                            <h4>Jacques Philips </h4>
-                        </div>
-                        <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Awesome Services!</h3>
-                            <p class="lead">Explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you completed.</p>
-                        </div>
-                        <!-- end testi-meta -->
-                    </div>
-                    <!-- end testimonial -->
-
-                    <div class="testimonial clearfix">
-                        <div class="testi-meta">
-                            <img src="{{ asset('library-temp') }}/images/testi_03.png" alt="" class="img-fluid">
-                            <h4>Venanda Mercy </h4>
-                        </div>
-                        <div class="desc">
-                            <h3><i class="fa fa-quote-left"></i> Great & Talented Team!</h3>
-                            <p class="lead">The master-builder of human happines no one rejects, dislikes avoids pleasure itself, because it is very pursue pleasure. </p>
-                        </div>
-                        <!-- end testi-meta -->
-                    </div><!-- end testimonial -->
                 </div><!-- end carousel -->
             </div><!-- end col -->
         </div><!-- end row -->

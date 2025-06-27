@@ -33,22 +33,14 @@ use Carbon\Carbon;
                             <div class="form-group row">
                                 <label for="#" class="col-sm-3 col-form-label"><strong>Tanggal Pinjam</strong></label>
                                 <div class="col-sm-3">
-                                    <input type="text" onfocus="(this.type='date')" class="form-control" name="Tanggal_Pinjam" placeholder="{{ Carbon::today()->format('m/d/Y') }}">
+                                    <input type="date" class="form-control" name="Tanggal_Pinjam" value="{{ Carbon::today()->format('Y-m-d') }}" placeholder="{{ Carbon::today()->format('m/d/Y') }}">
                                 </div>
                                 <label for="#" class="col-sm-3 col-form-label"><strong>Tanggal Kembali</strong></label>
                                 <div class="col-sm-3">
-                                    <input type="text" onfocus="(this.type='date')" class="form-control" name="Tanggal_Kembali" placeholder="{{ Carbon::now()->addDays(7)->format('m/d/Y') }}">
+                                    <input type="date" class="form-control" name="Tanggal_Kembali" value="{{ Carbon::now()->addDays(7)->format('Y-m-d') }}" placeholder="{{ Carbon::now()->addDays(7)->format('m/d/Y') }}">
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-xs-12 col-sm-12 col-md-12">
-                            <div class="form-group row">
-                                    <label for="#" class="col-sm-3 col-form-label"><strong>Kode Anggota</strong></label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="Kode_Anggota" class="form-control" placeholder="Masukkan Kode Anggota">
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group row">
                                     <label for="#" class="col-sm-3 col-form-label"><strong>Kode Anggota</strong></label>
@@ -69,7 +61,7 @@ use Carbon\Carbon;
                                     <select class="form-control" name="id_Buku" id="#">
                                             <option value="">Pilih Buku</option>
                                         @foreach ($buku as $itemBuku)
-                                            <option {{ $itemBuku->Stok < 1 ? 'disabled':'' }} value="{{ $itemBuku->id }}">{{ $itemBuku->Kode_Buku }} - {{ $itemBuku->Judul_Buku }} {{ $itemBuku->Stok < 1 ? '- Stok Kosong':'' }}</option>                            
+                                            <option {{ $itemBuku->Stok < 1 ? 'disabled':'' }} value="{{ $itemBuku->id }}">{{ $itemBuku->Kode_Buku }} - {{ $itemBuku->Judul_Buku }} sisa {{$itemBuku->Stok}} {{ $itemBuku->Stok < 1 ? '- Stok Kosong':'' }}</option>                            
                                         @endforeach
                                     </select>
                                 </div>

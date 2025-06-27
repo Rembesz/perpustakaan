@@ -33,7 +33,7 @@
                                     </div>
                                     <label for="#" class="col-sm-1 col-form-label"><strong>Foto</strong></label>
                                     <div class="col-sm-4">
-                                        <input type="file" name="file" class="form-control" placeholder="Masukkan Gambar">
+                                        <input type="file" name="file" class="form-control" placeholder="Masukkan Gambar" accept="image/*">
                                     </div>
                                 </div>
                             </div>

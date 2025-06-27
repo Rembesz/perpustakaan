@@ -40,6 +40,7 @@ class HomeController extends Controller
     }
     public function listbook(){
         $buku = Buku::all();
+        // return response()->json(Buku::all());
         return view('list_buku',compact('buku'));
     }
     public function search(Request $request){

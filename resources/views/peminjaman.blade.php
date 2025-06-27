@@ -27,6 +27,7 @@
                             <div class="contact_form">
                                 <div id="message"></div>
                                 <form id="contactform" class="" action="{{ route('pinjaman.store') }}" name="contactform" method="POST">
+                                    @csrf
                                     <div class="row row-fluid">
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <input type="text"  onfocus="(this.type='date')" name="Tanggal_Pinjam" class="form-control" placeholder=" Masukkan Tanggal Pinjam">

@@ -1,146 +1,31 @@
 @extends('backend.layout')
 
 @section('content')
+<!-- Include CSS for this page only -->
+<link rel="stylesheet" href="{{ asset('css/buku-show.css') }}">
+
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
+@if(isset($buku) && $buku)
+<!-- Meta tags for JavaScript -->
+@if ($buku->filepdf != Null)
+<meta name="pdf-url" content="{{ route('buku.stream', Crypt::encryptString($buku->id)) }}">
+<meta name="buku-judul" content="{{ $buku->Judul_Buku }}">
+<meta name="buku-penulis" content="{{ $buku->Penulis }}">
+<meta name="buku-kode" content="{{ $buku->Kode_Buku }}">
+<meta name="buku-image" content="{{ $buku->Img ? url('img-book/'.$buku->Img) : url('img-user/nopick.png') }}">
+@endif
+
+<!DOCTYPE html>
+
 <div class="container-fluid mt-4">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header text-center tittle-ai">Tampilan Data Buku</h1>
         </div>
     </div>
-
-
-<style>
-body {
-    background-color: #f9f9fa
-}
-
-.padding {
-    padding: 3rem !important
-}
-
-.user-card-full {
-    overflow: hidden
-}
-
-.card {
-    border-radius: 5px;
-    -webkit-box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
-    border: none;
-    margin-bottom: 30px
-}
-
-.m-r-0 {
-    margin-right: 0px
-}
-
-.m-l-0 {
-    margin-left: 0px
-}
-
-.user-card-full .user-profile {
-    border-radius: 5px 0 0 5px
-}
-
-.bg-c-lite-green {
-    background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
-    background: linear-gradient(to right, #ee5a6f, #f29263)
-}
-
-.user-profile {
-    padding: 20px 0
-}
-
-.card-block {
-    padding: 1.25rem
-}
-
-.m-b-25 {
-    margin-bottom: 25px
-}
-
-.img-radius {
-    border-radius: 5px
-}
-
-h6 {
-    font-size: 14px
-}
-
-.card .card-block p {
-    line-height: 25px
-}
-
-@media only screen and (min-width: 1400px) {
-    p {
-        font-size: 14px
-    }
-}
-
-.card-block {
-    padding: 1.25rem
-}
-
-.b-b-default {
-    border-bottom: 1px solid #e0e0e0
-}
-
-.m-b-20 {
-    margin-bottom: 20px
-}
-
-.p-b-5 {
-    padding-bottom: 5px !important
-}
-
-.card .card-block p {
-    line-height: 25px
-}
-
-.m-b-10 {
-    margin-bottom: 10px
-}
-
-.text-muted {
-    color: #919aa3 !important
-}
-
-.b-b-default {
-    border-bottom: 1px solid #e0e0e0
-}
-
-.f-w-600 {
-    font-weight: 600
-}
-
-.m-b-20 {
-    margin-bottom: 20px
-}
-
-
-.p-b-5 {
-    padding-bottom: 5px !important
-}
-
-.m-b-10 {
-    margin-bottom: 10px
-}
-
-.m-t-40 {
-    margin-top: 20px
-}
-
-.user-card-full .social-link li {
-    display: inline-block
-}
-
-.user-card-full .social-link li a {
-    font-size: 20px;
-    margin: 0 10px 0 0;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out
-}
-</style>
 <div class="page-content page-container" id="page-content">
     <div class="col-sm-12 mt-3">
         <div class="col-sm-4"></div>
@@ -174,6 +59,7 @@ h6 {
                                 </div>
                             </div>
                             <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Sisa Stok = {{ $buku->Stok }}</h6>
+                            
                             <div class="row ml-1">
                                 <a class="btn btn-primary" href="{{ route('buku.index') }}"> Kembali</a>
                             </div>
@@ -190,4 +76,97 @@ h6 {
         <div class="col-sm-4"></div>
     </div>
 </div>
+
+<!-- PDF Preview Section -->
+@if ($buku->filepdf != Null)
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Preview PDF Toggle Button -->
+            <button id="toggle-pdf-preview" class="btn btn-info mb-3">Preview PDF</button>
+            <div class="card" id="pdf-preview-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Preview PDF - {{ $buku->Judul_Buku }}</h5>
+                </div>
+                <div class="card-body" style="display: none;">
+                    <div class="pdf-container">
+                        <div class="pdf-view-mode mb-3">
+                            <button id="normal-view" class="btn btn-sm btn-primary active">Normal View</button>
+                            <button id="flip-view" class="btn btn-sm btn-outline-primary">Flip Book View</button>
+                        </div>
+                        
+                        <!-- Normal PDF Viewer -->
+                        <div id="normal-pdf-viewer" class="pdf-viewer">
+                            <div id="pdf-canvas-container"></div>
+                            <div id="pdf-controls" class="pdf-controls mt-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <button id="prev-page" class="btn btn-sm btn-outline-primary">Previous</button>
+                                        <span id="page-info" class="mx-3">Page <span id="page-num"></span> of <span id="page-count"></span></span>
+                                        <button id="next-page" class="btn btn-sm btn-outline-primary">Next</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button id="zoom-out" class="btn btn-sm btn-outline-secondary">Zoom Out</button>
+                                        <button id="zoom-in" class="btn btn-sm btn-outline-secondary">Zoom In</button>
+                                        <input type="number" id="page-input" class="form-control form-control-sm d-inline-block" style="width: 80px; margin: 0 10px;" placeholder="Page" min="1">
+                                        <button id="go-to-page" class="btn btn-sm btn-outline-info">Go</button>
+                                        <button id="download-pdf" class="btn btn-sm btn-success ml-2">Download PDF</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- StPageFlip Viewer -->
+                        {{-- <div id="flip-pdf-viewer" class="pdf-viewer" style="display: none;">
+                            <div id="book">
+                                <!-- Pages will be generated here -->
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@else
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">PDF</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">PDF belum diupload</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<!-- PDF.js Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+
+<!-- StPageFlip Library -->
+<script src="https://unpkg.com/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+
+<!-- Include JS for this page only -->
+<script src="{{ asset('js/buku-show.js') }}"></script>
+
+@else
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger">
+                <h4>Buku tidak ditemukan</h4>
+                <p>Buku yang Anda cari tidak ditemukan atau telah dihapus.</p>
+                <a href="{{ route('buku.index') }}" class="btn btn-primary">Kembali ke Daftar Buku</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection

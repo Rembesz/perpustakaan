@@ -13,10 +13,16 @@ class AnggotaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $anggota = Anggota::Orderby('Kode_Anggota')->paginate(10);
-        return view('backend.anggota.index',compact('anggota'))->with('i', (request()->input('page', 1) - 1) * 10);
+        $query = Anggota::query();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('Nama', 'like', "%$search%")
+                  ->orWhere('Kode_Anggota', 'like', "%$search%");
+        }
+        $anggota = $query->paginate(10);
+        return view('backend.anggota.index', compact('anggota'));
     }
 
     /**
@@ -84,8 +90,12 @@ class AnggotaController extends Controller
      */
     public function show($id)
     {
-        $anggota = Anggota::find($id);
-        return view('backend.anggota.show',compact('anggota'));
+        $anggota = \App\Model\Anggota::find($id);
+        if (!$anggota) {
+            // Redirect atau tampilkan pesan error jika data tidak ditemukan
+            return redirect()->route('anggota.index')->with('error', 'Anggota tidak ditemukan');
+        }
+        return view('backend.anggota.show', compact('anggota'));
     }
 
     /**

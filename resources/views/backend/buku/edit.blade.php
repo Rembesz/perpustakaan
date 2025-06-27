@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @extends('backend.layout')
    
 @section('content')
@@ -19,7 +23,7 @@
     @endif
 
     <div class="main-body">
-        <form action="{{ route('buku.update',$buku->id) }}" enctype='multipart/form-data' method="POST">
+        <form action="{{ route('buku.update', Crypt::encryptString($buku->id)) }}" enctype='multipart/form-data' method="POST">
             @csrf
             @method('PUT')
             <div class="row gutters-sm mt-3">
@@ -51,7 +55,15 @@
                                     <h3 class="mb-0">Foto Sampul</h3>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    <input type="file" name="img_book" class="form-control" placeholder="Masukkan Gambar">
+                                    <input type="file" name="img_book" class="form-control" placeholder="Maks. 2mb" accept="image/*">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-3">
+                                    <h3 class="mb-0">File PDF</h3>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    <input type="file" name="filepdf" class="form-control" placeholder="Maks. 20 mb" accept=".pdf">
                                 </div>
                             </div>
                             <div class="row mb-3">

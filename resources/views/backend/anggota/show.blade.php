@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @extends('backend.layout')
 
 @section('content')
@@ -95,7 +99,7 @@
                   <hr>
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-primary" href="{{ route('anggota.edit',$anggota->id) }}">Edit</a>
+                      <a class="btn btn-primary" href="{{ route('anggota.edit', Crypt::encryptString($anggota->id)) }}">Edit</a>
                       <a class="btn btn-info" href="{{ route('anggota.index') }}"> Kembali</a>
                     </div>
                   </div>

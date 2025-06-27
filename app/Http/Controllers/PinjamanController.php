@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Model\Pinjaman;
 use App\Model\Buku;
 use App\Model\Anggota;
+use App\Model\Pengembalian;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 Use Session;
@@ -16,9 +17,21 @@ class pinjamanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pinjaman = Pinjaman::Orderby('Tanggal_Pinjam')->paginate(100);
+        $query = Pinjaman::with(['anggota', 'buku'])->orderBy('Tanggal_Pinjam');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('anggota', function($q) use ($search) {
+                $q->where('Nama', 'like', "%$search%")
+                  ->orWhere('Kode_Anggota', 'like', "%$search%") ;
+            })
+            ->orWhereHas('buku', function($q) use ($search) {
+                $q->where('Judul_Buku', 'like', "%$search%")
+                  ->orWhere('Kode_Buku', 'like', "%$search%") ;
+            });
+        }
+        $pinjaman = $query->paginate(100);
         $date = Carbon::today()->toDateString();
         return view('backend.pinjaman.index',compact('pinjaman'));
     }
@@ -148,11 +161,42 @@ class pinjamanController extends Controller
     {
         $pinjaman = Pinjaman::find($id);
 
-        $take = Buku::findOrFail($pinjaman->id_Buku);
-        $take->Stok = $take->Stok +1;
-        $take->update();
+        if ($pinjaman->Status != null) {
+            $pengembalian = Pengembalian::find($pinjaman->Status);
+            if ($pengembalian) {
+                $pengembalian->delete();
+            }
+        } else {
+            $take = Buku::findOrFail($pinjaman->id_Buku);
+            $take->Stok = $take->Stok +1;
+            $take->update();
+        }
+
 
         $pinjaman->delete();
         return redirect()->route('pinjaman.index')->with('success','Pinjaman berhasil dihapus');
+    }
+    
+    
+    public function getMonthlyOrders(){
+    $months = [];
+    $orders = [];
+
+    for ($i = 5; $i >= 0; $i--) {
+        $date = Carbon::now()->subMonths($i);
+        $monthLabel = $date->format('M Y');
+        $months[] = $monthLabel;
+
+
+        $count = Pinjaman::whereYear('Tanggal_Pinjam', $date->year)
+            ->whereMonth('Tanggal_Pinjam', $date->month)
+            ->count();
+
+        $orders[] = $count;
+    }
+    return response()->json([
+        'months' => $months,
+        'orders' => $orders
+    ]);
     }
 }

@@ -8,11 +8,22 @@ use App\Model\Anggota;
 use Illuminate\Http\Request;
 use App\Model\Pinjaman;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Peminjaman;
 use phpDocumentor\Reflection\Types\Null_;
+use Carbon\Carbon;
 
 class PengembalianController extends Controller
 {
+    public function __construct()
+    {
+        // Rate limiting untuk mencegah brute force
+        $this->middleware('throttle:10,1')->only(['store', 'destroy']);
+        
+        // Pastikan user sudah login
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,8 +31,7 @@ class PengembalianController extends Controller
      */
     public function index()
     {
-        $pengembalian = Pengembalian::paginate(10);
-        return view('backend.pengembalian.index',compact('pengembalian'))->with('i', (request()->input('page', 1) - 1) * 10);
+      
     }
 
     /**
@@ -35,17 +45,6 @@ class PengembalianController extends Controller
         $data['anggota'] = Anggota::all();
         return view('backend.pengembalian.create',$data);
     }
-
-    // public function getTest()
-    // {
-    //     $sql="SELECT * FROM tbl_test";
-    //     $view = $this->dbh->prepare($sql);
-    //     $view->execute();
-    //     $data = $view->fetchAll();
-    //     dd($data);
-    //     return $data;
-    // }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -54,36 +53,86 @@ class PengembalianController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi
         $request->validate([
-            'Tanggal_Kembali'   => 'required',
-            'id_Buku'           => 'required',
-            'id_Anggota'        => 'required',
-            'Status'            => 'unique:pengembalian'
+            'Tanggal_Kembali'   => 'required|date',
+            'id_Buku'           => 'required|integer|exists:buku,id',
+            'id_Anggota'        => 'required|integer|exists:anggota,id',
+            'pinjaman_id'       => 'required|integer|exists:pinjaman,id',
+            'session_token'     => 'required|string',
         ]);
-        // Pengembalian::create($request->all());
-        
 
-        $cek = Pinjaman::where('id_Buku',$request->id_Buku)->where('id_Anggota',$request->id_Anggota)->pluck('id')->first();
-        if($cek != null){
-            $pengembalian = new Pengembalian;
-            $pengembalian->Tanggal_Kembali = $request->Tanggal_Kembali;
-            $pengembalian->Denda = $request->Denda;
-            $pengembalian->id_Buku = $request->id_Buku;
-            $pengembalian->id_Anggota = $request->id_Anggota;
-            $pengembalian->save();
-
-            $pinjaman = Pinjaman::find($cek);
-            $pinjaman->Status = $pengembalian->id;
-            $pinjaman->save();
-        }else{
-            return redirect()->route('pengembalian.create')->with('fail','Data Peminjaman tidak ditemukan');
+        // Validasi session token
+        if ($request->session_token !== session()->token()) {
+            Log::warning('Invalid session token attempt by user: ' . (auth()->user()->id ?? 'guest'));
+            return redirect()->back()->with('error', 'Sesi tidak valid');
         }
 
-        $buku = Buku::findOrFail($request->id_Buku);
-        // $stock_terakhir = Buku::findOrFail($request->id_Buku)->pluck('Stok')->first();
-        $buku->Stok = $buku->Stok +1;
-        $buku->update();
-        return redirect()->route('pengembalian.index')->with('success','Pengembalian berhasil di input');
+        // Sanitasi input
+        $idBuku = (int) $request->id_Buku;
+        $idAnggota = (int) $request->id_Anggota;
+        $pinjamanId = (int) $request->pinjaman_id;
+
+        // Ambil data pinjaman yang masih aktif
+        $pinjaman = Pinjaman::where('id', $pinjamanId)
+            ->where('id_Buku', $idBuku)
+            ->where('id_Anggota', $idAnggota)
+            ->whereNull('Status')
+            ->first();
+
+        if (!$pinjaman) {
+            Log::warning('Invalid pinjaman access attempt - ID: ' . $pinjamanId . ' by user: ' . (auth()->user()->id ?? 'guest'));
+            return redirect()->back()->with('error', 'Data pinjaman tidak ditemukan');
+        }
+
+        // Cek apakah user berhak mengakses data ini (optional)
+        // if (!auth()->user()->hasRole('admin')) {
+        //     return redirect()->back()->with('error', 'Anda tidak memiliki akses');
+        // }
+
+        $tanggalKembaliPinjaman = Carbon::parse($pinjaman->Tanggal_Kembali);
+        $tanggalKembaliHariIni = Carbon::now();
+        $selisihHari = $tanggalKembaliPinjaman->diffInDays($tanggalKembaliHariIni, false);
+
+        // Hitung denda otomatis
+        $denda = 0;
+        if ($selisihHari > 0 && $selisihHari <= 7) {
+            $denda = 10000;
+        } elseif ($selisihHari > 7 && $selisihHari <= 14) {
+            $denda = 20000;
+        } elseif ($selisihHari > 14 && $selisihHari <= 21) {
+            $denda = 30000;
+        } elseif ($selisihHari > 21 && $selisihHari <= 28) {
+            $denda = 40000;
+        } elseif ($selisihHari > 28) {
+            $denda = 100000;
+        }
+
+        try {
+            // Simpan pengembalian
+            $pengembalian = new Pengembalian;
+            $pengembalian->Tanggal_Kembali = $tanggalKembaliHariIni->toDateString();
+            $pengembalian->Denda = $denda;
+            $pengembalian->id_Buku = $idBuku;
+            $pengembalian->id_Anggota = $idAnggota;
+            $pengembalian->save();
+
+            // Update status pinjaman
+            $pinjaman->Status = $pengembalian->id;
+            $pinjaman->save();
+
+            // Update stok buku
+            $buku = Buku::find($idBuku);
+            if ($buku) {
+                $buku->Stok += 1;
+                $buku->save();
+            }
+
+            return redirect()->route('pinjaman.show', $idAnggota)->with('success', 'Pengembalian berhasil!');
+        } catch (\Exception $e) {
+            Log::error('Error in pengembalian store: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem');
+        }
     }
 
     /**
@@ -94,10 +143,7 @@ class PengembalianController extends Controller
      */
     public function show($id)
     {
-        $id = Crypt::decrypt($id);
-        // dd($id);
-        $pengembalian = Pengembalian::find($id);
-        return view('backend.pengembalian.show',compact('pengembalian'));
+        
     }
 
     /**
@@ -108,11 +154,7 @@ class PengembalianController extends Controller
      */
     public function edit($id)
     {
-        // $id = Crypt::decrypt($id);
-        $data['buku'] = Buku::all();
-        $data['anggota'] = Anggota::all();
-        $data['pengembalian'] = Pengembalian::find($id);
-        return view('backend.pengembalian.edit',$data);
+        
     }
 
     /**
@@ -124,36 +166,7 @@ class PengembalianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'Tanggal_Kembali'   => 'required',
-            'id_Buku'           => 'required',
-            'id_Anggota'        => 'required',
-        ]);
-
-        $cek = Pinjaman::where('id_Buku',$request->id_Buku)->where('id_Anggota',$request->id_Anggota)->pluck('id')->first();
-        if($cek != null){
-        $pengembalian = Pengembalian::find($id);
-        $bukutmp = $pengembalian->id_Buku;
-        $pengembalian->Tanggal_Kembali = $request->Tanggal_Kembali;
-        $pengembalian->Denda = $request->Denda;
-        $pengembalian->id_Buku = $request->id_Buku;
-        $pengembalian->id_Anggota = $request->id_Anggota;
-
-        $refund = Buku::findOrFail($bukutmp);
-        $refund->Stok = $refund->Stok +1;
-        $refund->update();
-
-        $take = Buku::findOrFail($request->id_Buku);
-        $take->Stok = $take->Stok -1;
-        $take->update();
-
-        $pengembalian->save();
-        }else{
-            return redirect()->route('pengembalian.create')->with('fail','Data Peminjaman tidak ditemukan');
-        }
-
-
-        return redirect()->route('pengembalian.index')->with('succes','data berhasil di update');
+        
     }
 
     /**
@@ -164,18 +177,47 @@ class PengembalianController extends Controller
      */
     public function destroy($id)
     {
-        $pengembalian = Pengembalian::findOrFail($id);
-        
-        $cek = Pinjaman::where('id_Buku',$pengembalian->id_Buku)->where('id_Anggota',$pengembalian->id_Anggota)->pluck('id')->first();
-        $pinjaman = Pinjaman::find($cek);
-        $pinjaman->Status = Null;
-        $pinjaman->save();
+        try {
+            // Validasi ID
+            if (!is_numeric($id)) {
+                return redirect()->back()->with('error', 'ID tidak valid');
+            }
 
-        $buku = Buku::findOrFail($pengembalian->id_Buku);
-        $buku->Stok = $buku->Stok -1;
-        $buku->update();
+            $pengembalian = Pengembalian::findOrFail($id);
+            
+            // Cek apakah user berhak mengakses data ini (optional)
+            // if (!auth()->user()->hasRole('admin')) {
+            //     return redirect()->back()->with('error', 'Anda tidak memiliki akses');
+            // }
+            
+            // Cek kepemilikan data - hanya bisa hapus pengembalian yang terkait dengan pinjaman yang sedang dilihat
+            $cek = Pinjaman::where('id_Buku',$pengembalian->id_Buku)
+                          ->where('id_Anggota',$pengembalian->id_Anggota)
+                          ->pluck('id')->first();
+            $pinjaman = Pinjaman::find($cek);
+            
+            if (!$pinjaman) {
+                return redirect()->back()->with('error', 'Data pinjaman tidak ditemukan');
+            }
+            
+            // Validasi tambahan: pastikan pengembalian ini benar-benar terkait dengan pinjaman yang sedang dilihat
+            if ($pinjaman->Status != $pengembalian->id) {
+                Log::warning('Unauthorized access attempt to pengembalian ID: ' . $id . ' by user: ' . (auth()->user()->id ?? 'guest'));
+                return redirect()->back()->with('error', 'Akses tidak diizinkan');
+            }
+            
+            $pinjaman->Status = Null;
+            $pinjaman->save();
 
-        $pengembalian->delete();
-        return redirect()->route('pengembalian.index')->with('success','Biodata berhasil dihapus');
+            $buku = Buku::findOrFail($pengembalian->id_Buku);
+            $buku->Stok = $buku->Stok -1;
+            $buku->update();
+
+            $pengembalian->delete();
+            return redirect()->route('pinjaman.show', $pengembalian->id_Anggota)->with('success','Pengembalian berhasil dibatalkan!');
+        } catch (\Exception $e) {
+            Log::error('Error in pengembalian destroy: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem');
+        }
     }
 }

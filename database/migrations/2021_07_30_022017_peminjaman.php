@@ -19,7 +19,7 @@ class Peminjaman extends Migration
             $table->date('Tanggal_Kembali');
             $table->foreignId('id_Buku')->constrained('buku')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('id_Anggota')->constrained('anggota')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('Status')->constrained('pengembalian')->onUpdate('cascade')->onDelete('cascade')->nullable();
+            $table->foreignId('Status')->nullable()->constrained('pengembalian')->onUpdate('cascade')->onDelete('cascade');
         });
     }
     /**

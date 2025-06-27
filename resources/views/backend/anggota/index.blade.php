@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @extends('backend.layout')
  
 @section('content')
@@ -11,8 +15,11 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-                    <div class="card-header border-0">
+                    <div class="card-header border-0 d-flex justify-content-between align-items-center">
                         <h3 class="mb-0 tittle-ai">Tabel Anggota</h3>
+                        <form method="GET" action="{{ route('anggota.index') }}" class="search-form-admin">
+                            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau kode anggota..." class="form-control search-input-admin">
+                        </form>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -28,7 +35,7 @@
                                         <th scope="col" class="text-center" data-sort="completion">Action</th>
                                       </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="anggota-list">
                                     @foreach ($anggota as $member)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
@@ -38,12 +45,9 @@
                                         <td>{{ $member->No_Telp }}</td>
                                         <td>{{ $member->Alamat }}</td>
                                         <td class="text-center">
-                                            <form action="{{ route('anggota.destroy',$member->id) }}" method="POST">
-
-                                                <a class="btn btn-info" href="{{ route('anggota.show',$member->id) }}">Tampil</a>
-                                                            
-                                                <a class="btn btn-primary" href="{{ route('anggota.edit',$member->id) }}">Edit</a>
-                                                    
+                                            <form action="{{ route('anggota.destroy', Crypt::encryptString($member->id)) }}" method="POST">
+                                                <a class="btn btn-info" href="{{ route('anggota.show', Crypt::encryptString($member->id)) }}">Tampil</a>
+                                                <a class="btn btn-primary" href="{{ route('anggota.edit', Crypt::encryptString($member->id)) }}">Edit</a>
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger">Hapus</button>

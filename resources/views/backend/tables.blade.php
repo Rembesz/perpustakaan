@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Crypt;
+@endphp
+
 @extends('backend.layout')
  
 @section('content')
@@ -82,9 +86,9 @@
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <form method="POST">
                                 @csrf
-                                <a class="dropdown-item" href="{{ route('buku.show',$book->id) }}">Tampil</a>
-                                <a class="dropdown-item" href="{{ route('buku.edit',$book->id) }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('buku.destroy',$book->id) }}">Hapus</a>
+                                <a class="dropdown-item" href="{{ route('buku.show', Crypt::encryptString($book->id)) }}">Tampil</a>
+                                <a class="dropdown-item" href="{{ route('buku.edit', Crypt::encryptString($book->id)) }}">Edit</a>
+                                <a class="dropdown-item" href="{{ route('buku.destroy', Crypt::encryptString($book->id)) }}">Hapus</a>
                             </form>
                             </div>
                         </div>
@@ -165,9 +169,9 @@
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <form method="POST">
                                 @csrf
-                                <a class="dropdown-item" href="{{ route('anggota.show',$member->id) }}">Tampil</a>
-                                <a class="dropdown-item" href="{{ route('anggota.edit',$member->id) }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('anggota.destroy',$member->id) }}">Hapus</a>
+                                <a class="dropdown-item" href="{{ route('anggota.show', Crypt::encryptString($member->id)) }}">Tampil</a>
+                                <a class="dropdown-item" href="{{ route('anggota.edit', Crypt::encryptString($member->id)) }}">Edit</a>
+                                <a class="dropdown-item" href="{{ route('anggota.destroy', Crypt::encryptString($member->id)) }}">Hapus</a>
                             </form>
                             </div>
                         </div>
@@ -240,9 +244,9 @@
                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                             <form method="POST">
                                 @csrf
-                                <a class="dropdown-item" href="{{ route('pinjaman.show',$pinjam->id_Anggota) }}">Tampil</a>
-                                <a class="dropdown-item" href="{{ route('pinjaman.edit',$pinjam->id) }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('pinjaman.delete',$pinjam->id) }}">Hapus</a>
+                                <a class="dropdown-item" href="{{ route('pinjaman.show', Crypt::encryptString($pinjam->id_Anggota)) }}">Tampil</a>
+                                <a class="dropdown-item" href="{{ route('pinjaman.edit', Crypt::encryptString($pinjam->id)) }}">Edit</a>
+                                <a class="dropdown-item" href="{{ route('pinjaman.delete', Crypt::encryptString($pinjam->id)) }}">Hapus</a>
                             </form>
                             </div>
                         </div>
@@ -259,93 +263,13 @@
           </div>
         </div>
       </div>
-      <!-- Table 4 -->
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <!-- Card header -->
-            <div class="card-header border-0">
-                <a href="pengembalian"><h3 class="mb-0">Tabel Pengembalian</h3></a>
-            </div>
-            <!-- Light table -->
-            <div class="table-responsive">
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col" class="text-center" data-sort="no">No</th>
-                    <th scope="col" class="sort" data-sort="tgl_kembali">Tanggal Kembali</th>
-                    <th scope="col" class="sort" data-sort="denda">Denda</th>
-                    <th scope="col" class="sort" data-sort="judul">Judul Buku</th>
-                    <th scope="col" class="sort" data-sort="nama">Nama Peminjam</th>
-                    <th scope="col" class="text-center">Action</th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody class="list">
-                    @foreach ($pengembalian as $kembali)
-                    <tr>
-                        <th class="text-center" scope="row">
-                            {{ $loop->iteration }}
-                        </th>
-                        <td>
-                            <span>{{ $kembali->Tanggal_Kembali }}</span>
-                        </td>
-                        <td>
-                            <span>
-                                {{ $kembali->Denda }}
-                                @if ($kembali->Denda == Null)
-                                    Tidak Ada Denda
-                                @endif
-                            </span>
-                        </td>
-                        <td>
-                        <div class="d-flex align-items-center Penulis">
-                            <span>
-                                @foreach ($kembali->buku as $itemBuku)
-                                    {{ $itemBuku->Judul_Buku }}
-                                @endforeach
-                            </span>
-                        </div>
-                        </td>
-                        <td>
-                        <div class="d-flex align-items-center">
-                            <span> {{ $kembali->anggota->Nama }}</span>
-                        </div>
-                        </td>
-                        <td class="text-center">
-                        <div class="dropdown">
-                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                            <form method="POST">
-                                @csrf
-                                <a class="dropdown-item" href="{{ route('pengembalian.show',$kembali->id) }}">Tampil</a>
-                                <a class="dropdown-item" href="{{ route('pengembalian.edit',$kembali->id) }}">Edit</a>
-                                <a class="dropdown-item" href="{{ route('pengembalian.destroy',$kembali->id) }}">Hapus</a>
-                            </form>
-                            </div>
-                        </div>
-                        </td>
-                    </tr>
-                    @endforeach
-               </tbody>
-              </table>
-            </div>
-            <!-- Card footer -->
-            <div class="card-footer py-4">
-              {{ $pengembalian->links() }} 
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="container-fluid mt0">
       <footer class="footer pt-0">
         <div class="row align-items-center justify-content-lg-between">
           <div class="col-lg-6">
             <div class="copyright text-center  text-lg-left  text-muted">
-              &copy; 2021 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">PerpustakaanKu</a>
+              &copy; 2021 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">AyoMaca</a>
             </div>
           </div>
         </div>

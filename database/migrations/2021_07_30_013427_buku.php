@@ -20,6 +20,7 @@ class Buku extends Migration
             $table->string('Judul_Buku');
             $table->string('Penulis');
             $table->integer('Stok');
+            $table->string('filepdf')->nullable();
         });
     }
 

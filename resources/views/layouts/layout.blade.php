@@ -9,14 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
  
      <!-- Site Metas -->
-    <title>PerpustakaanKu</title>  
+    <title>AyoMaca</title>  
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Site Icons -->
-    <link rel="shortcut icon" href="{{ asset('library-temp') }}/images/favicon.ico" type="image/x-icon" />
-    <link rel="apple-touch-icon" href="{{ asset('library-temp') }}/images/apple-touch-icon.png">
+    <link rel="shortcut icon" href="{{ asset('library-temp') }}/images/icon.png" type="image/x-icon" />
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('library-temp') }}/css/bootstrap.min.css">
@@ -28,6 +27,9 @@
     <link rel="stylesheet" href="{{ asset('library-temp') }}/css/responsive.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('library-temp') }}/css/custom.css">
+    <!-- My Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/my.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/buku-show.css') }}">
 
     <!-- Modernizer for Portfolio -->
     <script src="{{ asset('library-temp') }}/js/modernizer.js"></script>
@@ -150,46 +152,6 @@
 							</div>
 						</form>
 					</div>
-					{{-- <div class="tab-pane" id="Adm"><a href="Home"></a>
-						<form role="form" class="form-horizontal" method="POST" action="{{ route('login') }}">
-							@csrf
-
-							<div class="form-group">
-								<div class="col-sm-12">
-									<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
-
-									@error('email')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-									@enderror
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-12">
-									<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
-
-									@error('password')
-										<span class="invalid-feedback" role="alert">
-											<strong>{{ $message }}</strong>
-										</span>
-									@enderror
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-10">
-									<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
-										{{ __('Login') }}
-									</button>
-									@if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                	@endif
-								</div>
-							</div>
-						</form>
-					</div> --}}
 				</div>
 			</div>
 		</div>
@@ -210,7 +172,7 @@
 	<header class="top-navbar">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="index">
+				<a class="navbar-brand" href="/">
 					<img src="{{ asset('library-temp') }}\images/logo.png" alt="" />
 				</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-host" aria-controls="navbars-rs-food" aria-expanded="false" aria-label="Toggle navigation">
@@ -220,28 +182,11 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbars-host">
 					<ul class="navbar-nav ml-auto">
-						<li class="nav-item "><a class="nav-link" href="{{ route('home') }}">PerpustakaanKu</a></li>
-						<li class="nav-item"><a class="nav-link"  href="{{ route('about-page') }}">Tentang Kami</a></li>
+						<li class="nav-item "><a class="nav-link" href="{{ route('home') }}">AyoMaca</a></li>
+						<li class="nav-item"><a class="nav-link" href="{{ Request::is('/') ? '#tentang' : route('home') . '#tentang' }}">Tentang Kami</a></li>
 						<li class="nav-item"><a class="nav-link" href="{{ route('list_buku') }}">List Buku</a></li>
-						<li class="nav-item"><a class="nav-link" href="{{ route('anggota-page') }}">Anggota</a></li>
-						<li class="nav-item"><a class="nav-link" href="{{ route('kontak') }}">Kontak</a></li>
+						<li class="nav-item"><a class="nav-link" href="{{ Request::is('/') ? '#kontak' : route('home') . '#kontak' }}">Kontak</a></li>
 					</ul>
-					@guest
-					<ul class="nav navbar-nav navbar-right">
-                        <li><a class="hover-btn-new log orange" href="#" data-toggle="modal" data-target="#login"><span>Masuk</span></a></li>
-                    </ul>
-					@else
-					<ul class="nav navbar-nav navbar-right">
-                        <li><a class="hover-btn-new log orange" href="{{ route('logout') }}"
-							onclick="event.preventDefault();
-							document.getElementById('logout-form').submit()";><span>{{ __('Logout') }}</span></a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-						</li>
-                    </ul>
-					@endguest
-					
 				</div>
 			</div>
 		</nav>
@@ -270,7 +215,7 @@
                         <div class="widget-title">
                             <h3>Tentang Kami</h3>
                         </div>
-                        <p> PerpustakaanKu adalah perpustakaan yang mempunyai koleksi buku sebagian besar dalam bentuk format digital dan yang bisa diakses dengan komputer.</p>   
+                        <p> AyoMaca adalah perpustakaan yang mempunyai koleksi buku sebagian besar dalam bentuk format digital dan yang bisa diakses dengan komputer.</p>   
 						<div class="footer-right">
 							<ul class="footer-links-soi">
 								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -291,8 +236,8 @@
                         <ul class="footer-links">
                             <li><a href="index">Home</a></li>
                             <li><a href="#">Blog</a></li>
-							<li><a href="{{ route('about-page') }}">Tentang kami</a></li>
-							<li><a href="{{ route('kontak') }}">Kontak</a></li>
+							<li><a href="{{ Request::is('/') ? '#tentang' : route('home') . '#tentang' }}">Tentang kami</a></li>
+							<li><a href="{{ Request::is('/') ? '#kontak' : route('home') . '#kontak' }}">Kontak</a></li>
                         </ul><!-- end links -->
                     </div><!-- end clearfix -->
                 </div><!-- end col -->
@@ -304,8 +249,8 @@
                         </div>
 
                         <ul class="footer-links">
-                            <li><a href="mailto:#">info@perpustakaanku.com</a></li>
-                            <li><a href="#">www.perpustakaanku.com</a></li>
+                            <li><a href="mailto:#">info@ayomaca.com</a></li>
+                            <li><a href="#">www.ayomaca.com</a></li>
                             <li>Mojokerto, 61361</li>
                             <li>+62 81353073422</li>
                         </ul><!-- end links -->
@@ -320,7 +265,7 @@
         <div class="container">
             <div class="footer-distributed">
                 <div class="footer-center">                   
-                    <p class="footer-company-name">All Rights Reserved. &copy; 2021 <a href="#">PerpustakaanKu</a> Design By : <a href="#">Free fee</a></p>
+                    <p class="footer-company-name">All Rights Reserved. &copy; 2021 <a href="#">AyoMaca</a> Design By : <a href="#"></a></p>
                 </div>
             </div>
         </div><!-- end container -->
@@ -341,5 +286,33 @@
 			visibleItems: 4
 		});
 	</script>
+    <script>
+        // Smooth scroll dengan jQuery
+        $(document).ready(function(){
+            // Handle click pada link dengan hash
+            $('a[href^="#"]').on('click', function(e) {
+                e.preventDefault();
+                var target = $(this.hash);
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 70 // offset untuk navbar
+                    }, 800);
+                }
+            });
+
+            // Handle hash di URL saat halaman dimuat
+            if(window.location.hash) {
+                var target = $(window.location.hash);
+                if (target.length) {
+                    setTimeout(function() {
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - 70
+                        }, 800);
+                    }, 100);
+                }
+            }
+        });
+    </script>
+    @stack('scripts')
 </body>
 </html>

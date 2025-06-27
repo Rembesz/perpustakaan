@@ -33,7 +33,7 @@
                                 </div>
                                 <label for="#" class="col-sm col-form-label"><strong>Foto</strong></label>
                                 <div class="col-sm-4">
-                                    <input type="file" name="img_book" class="form-control" placeholder="Masukkan Gambar">      
+                                    <input type="file" name="img_book" class="form-control" placeholder="Masukkan Gambar" accept="image/*">      
                                 </div>
                             </div>
                         </div>
@@ -48,8 +48,12 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group row">
                                 <label for="#" class="col-sm-3 col-form-label"><strong>Penulis</strong></label>
-                                <div class="col-sm-9">
+                                <div class="col-sm-4">
                                     <input type="text" name="Penulis" class="form-control" placeholder="Nama Penulis">
+                                </div>
+                                <label for="#" class="col-sm-2 col-form-label"><strong>Upload PDF</strong></label>
+                                <div class="col-sm-3">
+                                    <input type="file" name="filepdf" class="form-control" placeholder="Maks. 20 mb" accept=".pdf">      
                                 </div>
                             </div>
                         </div>
@@ -57,7 +61,7 @@
                             <div class="form-group row">
                                 <label for="#" class="col-sm-3 col-form-label"><strong>Stok</strong></label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="Stok" class="form-control" placeholder="Jumlah Stok Tersedia">
+                                    <input type="number" name="Stok" class="form-control" placeholder="Jumlah Stok Tersedia">
                                 </div>
                             </div>
                         </div>
