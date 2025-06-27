@@ -1,7 +1,7 @@
 <h1 align="center">📚 Sistem Informasi Perpustakaan</h1>
 
 <p align="center">
-  <i>Aplikasi web untuk manajemen perpustakaan berbasis Laravel</i><br><br>
+  <i>Aplikasi web untuk manajemen perpustakaan berbasis Laravel dapat digunakan untuk online dan offline</i><br><br>
   <img src="https://img.shields.io/badge/Status-Development-yellow" />
   <img src="https://img.shields.io/badge/Laravel-10.x-red" />
   <img src="https://img.shields.io/badge/Made%20with-Love-ff69b4" />
@@ -15,8 +15,8 @@
 ✅ Manajemen data buku (tambah, edit, hapus)  
 ✅ Pencarian buku  
 ✅ Peminjaman dan pengembalian buku  
-✅ Role-based akses (admin & anggota)  
-✅ Dashboard statistik peminjaman dan buku
+✅ Non login user dapat membaca flipbook
+✅ Dashboard statistik peminjaman dan pengunjung
 
 ---
 
