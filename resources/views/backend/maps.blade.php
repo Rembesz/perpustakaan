@@ -24,8 +24,15 @@
     <div class="row">
       <div class="col">
         <div class="card border-0">
-            <script async defer src="https://maps.googleapis.com/maps/api/js?key=Removed&callback=initMap&libraries=places" type="text/javascript"></script>
-          <div id="map-default" class="map-canvas" data-lat="-7.463098380770655" data-lng="112.43265840061012" style="height: 600px;"></div>
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.463098380770655!2d112.43265840061012!3d-7.463098380770655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjcnNDcuMSJTIDExMsKwMjUnNTcuNiJF!5e0!3m2!1sen!2sid!4v1234567890"
+            width="100%" 
+            height="600" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
     </div>
