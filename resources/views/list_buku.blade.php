@@ -4,17 +4,6 @@
 
 @extends('layouts.layout')
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<style>
-.btn-outline-primary.liked {
-    background-color: #ff4757 !important;
-    color: #fff !important;
-    border: none !important;
-    box-shadow: 0 2px 6px rgba(255,71,87,0.15);
-}
-.btn-outline-primary:disabled {
-    opacity: 1;
-}
-</style>
 
 @section('buku1')
 <div class="buku1">
@@ -23,44 +12,6 @@
       <h1>List Buku <span class="m_1">Daftar Buku yang tersedia saat ini</span></h1>
     </div>
   </div>
-
-  <style type="text/css">
-    p{
-      font-family: serif;
-      font-size: 12px;
-    }
-    i { 
-      font-family: sans;
-      color: orange;
-    }
-    .img-book {
-      width: 100px%;
-      height: 140px;
-    }
-    .tittle-book {
-      font-family: Verdana, Geneva, Tahoma, sans-serif;
-      text-align: center;
-      margin:center;
-      font-weight: bold;
-      text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
-  }
-
-  @media (min-width: 992px) {
-    .modal-flipbook.modal .modal-dialog {
-      max-width: 80vw;
-    }
-  }
-
-  .flip-book {
-      margin: 0 auto;
-  }
-  .modal-body .pdf-viewer, .modal-body .flip-book {
-      /* The height is set by the page-flip.js configuration */
-      width: 100%;
-  }
-
-  </style>
-
   <div id="overviews" class="section wb">
         <div class="container">  
           <div class="Search">
@@ -139,7 +90,67 @@
           </div>
         </div><!-- end container -->
   </div><!-- end section -->
+  <style type="text/css">
+    p{
+      font-family: serif;
+      font-size: 12px;
+    }
+    i { 
+      font-family: sans;
+      color: orange;
+    }
+    .img-book {
+      width: 100px%;
+      height: 140px;
+    }
+    .tittle-book {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+      text-align: center;
+      margin:center;
+      font-weight: bold;
+      text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+  }
 
+  @media (min-width: 992px) {
+    .modal-flipbook.modal .modal-dialog {
+      max-width: 80vw;
+    }
+  }
+
+  @media (max-width: 499px) {
+    .modal-flipbook.modal .modal-dialog {
+      max-width: 95vw;
+      margin: 10px auto;
+    }
+    
+    .modal-flipbook .modal-body {
+      padding: 10px;
+    }
+    
+    .flip-book {
+      margin: 0 auto;
+      max-width: 100%;
+    }
+  }
+
+  .flip-book {
+      margin: 0 auto;
+  }
+  .modal-body .pdf-viewer, .modal-body .flip-book {
+      /* The height is set by the page-flip.js configuration */
+      width: 100%;
+  }
+
+  .btn-outline-primary.liked {
+      background-color: #ff4757 !important;
+      color: #fff !important;
+      border: none !important;
+      box-shadow: 0 2px 6px rgba(255,71,87,0.15);
+  }
+  .btn-outline-primary:disabled {
+      opacity: 1;
+  }
+  </style>
 @endsection
 
 @push('scripts')
@@ -181,13 +192,59 @@ document.addEventListener('DOMContentLoaded', function () {
         async function initStPageFlip() {
             try {
                 const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+                const screenWidth = window.innerWidth;
 
                 // Get the first page to determine the aspect ratio
                 const firstPage = await pdf.getPage(1);
                 const viewport = firstPage.getViewport({ scale: 1 });
                 const aspectRatio = viewport.height / viewport.width;
                 
-                // Define a fixed width and calculate the height based on the aspect ratio
+                if (screenWidth < 500) {
+                    // Mobile - Simple single page view with manual navigation
+                    let currentPage = 1;
+                    const totalPages = pdf.numPages;
+                    
+                    async function renderPage(pageNum) {
+                        const page = await pdf.getPage(pageNum);
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        const viewport = page.getViewport({ scale: 1.2 });
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        await page.render({ canvasContext: context, viewport: viewport }).promise;
+                        
+                        bookContainer.html(`
+                            <div style="text-align: center; padding: 10px;">
+                                <img src="${canvas.toDataURL()}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                                    <button onclick="changePage(${pageNum - 1})" class="btn btn-sm btn-outline-primary" ${pageNum <= 1 ? 'disabled' : ''}>
+                                        <i class="fa fa-chevron-left"></i> Sebelumnya
+                                    </button>
+                                    <span style="padding: 5px 10px; background: #f8f9fa; border-radius: 4px; font-size: 12px;">
+                                        ${pageNum} / ${totalPages}
+                                    </span>
+                                    <button onclick="changePage(${pageNum + 1})" class="btn btn-sm btn-outline-primary" ${pageNum >= totalPages ? 'disabled' : ''}>
+                                        Selanjutnya <i class="fa fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `);
+                    }
+                    
+                    // Make changePage function globally accessible
+                    window.changePage = function(newPage) {
+                        if (newPage >= 1 && newPage <= totalPages) {
+                            currentPage = newPage;
+                            renderPage(currentPage);
+                        }
+                    };
+                    
+                    // Render first page
+                    await renderPage(currentPage);
+                    return;
+                }
+
+                // Desktop/Tablet - Full flipbook
                 const bookWidth = 550;
                 const bookHeight = bookWidth * aspectRatio;
 
@@ -221,11 +278,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     canvas.width = viewport.width;
                     await page.render({ canvasContext: context, viewport: viewport }).promise;
                     pagesHtml += `<div class="page"><div class="page-content"><img src="${canvas.toDataURL()}" style="width: 100%; height: 100%;"></div></div>`;
-                }
-                
-                // Last page (back cover)
-                if (numPages > 1) {
-                     pagesHtml += `<div class="page page-cover" data-density="hard"><div class="page-content"></div></div>`;
                 }
 
                 bookContainer.html(pagesHtml);

@@ -45,7 +45,7 @@ class AnggotaController extends Controller
     {
         $request->validate([
             'Kode_Anggota'  => 'required|unique:anggota',
-            'Nama'          => 'required|unique:anggota',
+            'Nama'          => 'required',
             'file'          => 'file|image|mimes:jpeg,png,jpg|max:2048',
             'Jurusan'       => 'required',
             'No_Telp'       => 'required|max:12|min:10',
@@ -120,7 +120,7 @@ class AnggotaController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'Kode_Anggota'  => 'required|unique:anggota',
+            'Kode_Anggota'  => 'required|unique:anggota,Kode_Anggota,'.$id,
             'Nama'          => 'required',
             'file'          => 'file|image|mimes:jpeg,png,jpg|max:2048',
             'Jurusan'       => 'required',
@@ -161,7 +161,7 @@ class AnggotaController extends Controller
             $anggota->save();
         }
         
-        return redirect()->route('anggota.index')->with('succes','Anggota berhasil di update');
+        return redirect()->route('anggota.index')->with('success','Anggota berhasil di update');
     }
 
     /**

@@ -65,7 +65,7 @@
 
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
+									<input id="login-email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email">
 
 									@error('email')
 										<span class="invalid-feedback" role="alert">
@@ -76,7 +76,7 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
+									<input id="login-password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
 
 									@error('password')
 										<span class="invalid-feedback" role="alert">
@@ -105,7 +105,7 @@
 
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Masukkan Nama">
+									<input id="register-name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Masukkan Nama">
 									
 									@error('name')
 										<span class="invalid-feedback" role="alert">
@@ -116,7 +116,7 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Masukkan Email">
+									<input id="register-email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="Masukkan Email">
 
 									@error('email')
 										<span class="invalid-feedback" role="alert">
@@ -127,7 +127,7 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-12">
-									<input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Masukkan Password">
+									<input id="register-password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password" placeholder="Masukkan Password">
 
 									@error('password')
 										<span class="invalid-feedback" role="alert">
@@ -143,7 +143,7 @@
 							</div>
 							<div class="row">							
 								<div class="col-sm-10">
-									<button type="sub,it" class="btn btn-light btn-radius btn-brd grd1">
+									<button type="submit" class="btn btn-light btn-radius btn-brd grd1">
 										{{ __('Register') }}
 									</button>
 									<button type="button" class="btn btn-light btn-radius btn-brd grd1" data-dismiss="modal">
